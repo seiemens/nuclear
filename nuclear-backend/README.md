@@ -1,0 +1,13 @@
+### TODO's
+- user
+  - register
+  - login
+  - upload
+  - download
+  - delete
+  - share link
+- admin
+  - login
+  - panel
+  - delete user
+- cookie auth

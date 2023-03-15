@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Quicksand&display=swap');
+
+:root {
+    --black: 28 28 31;
+    --lblack: 38 38 41;
+    --white: 239 239 239;
+
+    --g-green: 0 220 130;
+    --g-turq: 54 228 218;
+    --g-blue: 0 71 225;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html,
+#__nuxt,
+#__layout {
+    height: 100% !important;
+    width: 100% !important;
+    background-color: rgb(var(--black));
+    color: rgb(var(--white));
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+}
+h1 {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: rgb(var(--white));
+    text-decoration: none;
+    transition: 0.25s;
+    margin: 0.5rem;
+}
+a:hover{
+    text-decoration: underline;
+}
+
+input, button {
+    padding: 1rem;
+    margin: 0.25rem;
+    border-radius: 0.5rem;
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(var(--white));
+    background-color: rgb(var(--lblack));
+    border: none;
+    font-size: 1.5rem;
+    outline:none;
+    transition: 0.25s;
+}
+button:hover, input:focus, input:hover{
+    box-shadow: 0.25rem 0.25rem rgb(var(--g-green));
+    translate: -0.25rem -0.25rem;
+}
+::placeholder {
+    color: rgb(var(--white));
+}
+
+.container{
+    width: 100%;
+    height: calc(100% - 3rem);
+}
+
+#accent {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 5rem;   
+    background-image: linear-gradient(90deg, rgb(var(--g-green)), rgb(var(--g-turq)), rgb(var(--g-blue))); 
+   filter: blur(100px);
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.green {
+    color: rgb(var(--g-green));
+}
