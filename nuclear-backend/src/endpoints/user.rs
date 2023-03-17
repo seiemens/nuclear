@@ -4,9 +4,6 @@ use rocket::{serde::json::Json, http::{Status, CookieJar, Cookie}, State};
 
 use crate::{models::User, helpers::{endecr, token, cookies::{get_cookie_value, cookie}}, data::connector::Connector};
 
-
-
-
 /// Slams the user data through a model to make it easier to use.
 pub fn parse_user(u: Json<User>) -> Result<User, Error> {
     
@@ -61,7 +58,7 @@ pub async fn login(
 ) -> Result<Json<User>, Status> {
     let data = parse_user(u).unwrap();
     let user = db.get_user(data.clone()).await;
-    println!("{:?}", data);
+    println!("{:?}", user);
     // recurring if statement - used to check if a user exists
     if let Ok(None) = user {
         return Err(Status::ImATeapot);

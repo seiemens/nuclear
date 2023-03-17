@@ -1,12 +1,14 @@
 <template>
     <div class="container centered">
-        <h1>welcome back!</h1>
+        <div class="centered fancy-bg">
+            <h1>welcome back!</h1>
         <form v-on:submit.prevent="onSubmit()" class="centered">
             <input type="text" placeholder="email" v-model="email">
             <input type="password" placeholder="password" v-model="password">
             <button type="submit">login</button>
         </form>
         <a href="/register">no account yet?</a>
+        </div>
     </div>
 </template>
 
@@ -30,7 +32,10 @@ export default {
                 credentials:"include",
                 body:reqData
             });
-            console.log(result);
+            if (result.auth_token) {
+                document.cookie = `auth_biscuit=${result.auth_token}; path=/;`;
+                navigateTo('/dashboard');
+            }
         }
     }
 }

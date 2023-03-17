@@ -1,15 +1,17 @@
 <template>
     <div class="container centered">
-        <h1>hey there!</h1>
+        <div class="centered fancy-bg">
+            <h1>hey there!</h1>
         <form action="" method="POST" v-on:submit.prevent="submit()" class="centered">
             <input type="text" placeholder="name" v-model="name">
             <input type="text" placeholder="email" v-model="email">
             <input type="password" placeholder="password" v-model="password">
-            <button type="submit">login</button>
+            <button type="submit">register</button>
         </form>
         <a href="/login">already got an account?</a>
-        <div v-if="res == true" class="green">
-            <a href="/login">success, go back to login</a>
+        </div>
+        <div v-if="success == true" class="success">
+            <a href="/login">success! return to <span class="turqoise">login</span></a>
         </div>
     </div>
 </template>
@@ -21,7 +23,7 @@ export default {
             name:"",
             email:"",
             password:"",
-            res:undefined
+            success:undefined
         }
     },
     methods:{
@@ -32,12 +34,15 @@ export default {
                 role:0,
                 password:this.password
             };
-            const {result} = await $fetch('http://localhost:4200/user/new', {
-                mode:"no-cors",
+            const result = await $fetch('http://localhost:4200/user/new', {
+                mode:"cors",
                 method:"POST",
+                credentials:"include",
                 body:req
             });
-            console.log(result);
+            if(result.insertedId) {
+                this.success = true;
+            }
         }
     }
 }

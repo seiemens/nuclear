@@ -24,3 +24,15 @@
     content: "]";
     color: rgb(var(--g-green));
 }
+
+.buzzwords {
+    margin-top: 3rem;
+    font-size: 2rem;
+}
+.buzz {
+    color: rgb(var(--g-turq));
+}
+#blob{
+    position: absolute;
+    top: 0;
+}

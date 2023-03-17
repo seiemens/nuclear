@@ -1,6 +1,5 @@
-use std::time::Duration;
 use rocket::http::{Cookie, CookieJar, SameSite};
-use rocket::time::OffsetDateTime;
+use rocket::time::{Duration};
 
 /*
 ----- BISCUIT GENERATOR -----
@@ -8,14 +7,24 @@ use rocket::time::OffsetDateTime;
 */
 
 pub fn cookie(name: String, value: String) -> Cookie<'static> {
-    return Cookie::build(name, value)
-        .path("/")
-        .expires(OffsetDateTime::now_utc()+Duration::from_secs(3600*24*2))
-        .same_site(SameSite::None)
-        .finish(); // Setting the expiry date to 'None' sets it to expire when the session gets closed.
+    let cookie = Cookie::build(name, value)
+    .path("/")
+    .max_age(Duration::hours(3))
+    .secure(true)
+    .http_only(true)
+    .same_site(SameSite::None)
+    .finish(); // Setting the expiry date to 'None' sets it to expire when the session gets closed.
+    println!("{:?}", cookie);
+    return cookie;
 }
 
 /// Used to extract value from cookie.
 pub fn get_cookie_value(jar: &CookieJar<'_>, name: String) -> String {
-    return String::from(jar.get(&name).map(|cookie| cookie.value()).unwrap());
+    let c = jar.get(&name);
+
+    if c.is_some() {
+        return String::from(jar.get(&name).map(|cookie| cookie.value()).unwrap());
+    }else {
+        return String::from("");
+    }
 }
