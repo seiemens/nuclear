@@ -1,16 +1,14 @@
 <template>
     <div class="header">
-        <div class="header-bg"></div>
-        <span id="logo">
-            | nuclear |
-        </span>
-        <div class="nav">
+            <span id="logo">
+                | nuclear |
+            </span>
             <a href="/">[home]</a>
             <a href="/dashboard">[dashboard]</a>
-        </div>
-        <div class="user">
-            <a href="/register">[register]</a>
-        </div>
+            <div class="profile">
+                <a v-if="!auth" href="/register">[register]</a>
+                <a v-else href="/profile">[profile]</a>
+            </div>
     </div>
 </template>
 
@@ -19,10 +17,16 @@
 
 <script>
 export default {
-    async verify() {
-        const result = await $fetch('http://localhost:4200/auth',{credentials:"include"});
-        if(result == false) {
-            navigateTo('/login');
+    data() {
+        return{
+            auth: false
+        }
+    },
+    mounted() {
+        const cookie = useCookie('auth_biscuit');
+        console.log(cookie);
+        if(cookie.value != undefined) {
+            this.auth = true;
         }
     }
 }

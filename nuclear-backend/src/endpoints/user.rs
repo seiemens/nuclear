@@ -59,17 +59,16 @@ pub async fn login(
     let data = parse_user(u).unwrap();
     let user = db.get_user(data.clone()).await;
     println!("{:?}", user);
-    // recurring if statement - used to check if a user exists
+
     if let Ok(None) = user {
         return Err(Status::ImATeapot);
     } else {
         // and return a biscuit if it does.
-        let temp = user.clone();
         jar.add(cookie(
-            String::from("auth_biscuit"),
-            String::from(user.unwrap().unwrap().auth_token.unwrap()),
+            String::from("auth"),
+            String::from(user.clone().unwrap().unwrap().auth_token.unwrap()),
         ));
-        return Ok(Json(temp.unwrap().unwrap()));
+        return Ok(Json(user.unwrap().unwrap()));
     }
 }
 

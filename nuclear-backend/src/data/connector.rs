@@ -11,7 +11,7 @@ use mongodb::{
     bson::{doc, oid::ObjectId},
     Client,
     Collection,
-    error::Error, results::{DeleteResult, InsertOneResult},
+    error::Error, results::{DeleteResult, InsertOneResult, InsertManyResult},
 };
 use rocket::{futures::TryStreamExt, http::Status};
 
@@ -19,7 +19,7 @@ use crate::models::{File, User};
 
 pub struct Connector {
     user_col: Collection<User>,
-    files_col: Collection<File>,
+    file_col: Collection<File>,
 }
 
 impl Connector {
@@ -34,10 +34,10 @@ impl Connector {
         let client = Client::with_uri_str(uri).await.unwrap();
         let db = client.database("nuclear");
         let user_col: Collection<User> = db.collection("users");
-        let files_col: Collection<File> = db.collection("files");
+        let file_col: Collection<File> = db.collection("files");
         Connector {
             user_col,
-            files_col,
+            file_col,
         }
     }
 }
@@ -160,15 +160,19 @@ impl Connector {
 */
 
 impl Connector {
-    pub async fn upload_file(file:Vec<u8>)-> /*Result<<File>, Status>*/ i32 {
+    pub async fn upload_files(&self, files: Vec<File>) -> Result<InsertManyResult, Error> {
+        let files = self.file_col.insert_many(files, None).await;
+        
+        return Ok(files.unwrap());
+    }
+
+    pub async fn prepare_file(filename:String) -> /*Result<<File>, Status>*/ i32 {
         return 0;
     }
 
-    pub async fn prepare(filename:String) -> /*Result<<File>, Status>*/ i32 {
-        return 0;
-    }
-
-    pub async fn delete_file(id:ObjectId) -> Result<Status,Status> {
-        return Ok(Status::ImATeapot);
+    pub async fn delete_file(&self, id: ObjectId) -> Result<DeleteResult, Error> {
+        let filter = doc! {"_id":id};
+        let result = self.file_col.delete_one(filter, None).await?;
+        return Ok(result);
     }
 }

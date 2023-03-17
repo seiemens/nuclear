@@ -5,6 +5,7 @@
     padding: 1rem;
     font-size: 1.5rem;
     display: flex;
+    flex-direction: row;
     transition: 0.3s;
     z-index: 10;
 
@@ -16,12 +17,15 @@
 .header:hover a{
     color: rgb(var(--black));
 }
+.header a {
+    margin: 0 0.5rem;
+}
+.profile {
+    position:absolute;
+    right: 0;
+    margin-right: 2.5rem;
+}
 
 #logo {
-    margin-right: 2rem;
-}
-.user {
-    position: absolute;
-    right: 0;
-    margin-right: 3rem;
+    margin-right: 0.5rem;
 }
