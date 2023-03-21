@@ -39,12 +39,21 @@ pub async fn new_user(
     match user_detail {
         Ok(user) => Ok(Json(user)),
         Err(_) => Err(Status::ImATeapot),
-    }}
+    }
+}
 
 #[post("/user/delete", data="<u>")]
-pub async fn delete_user(u:Json<User>) -> Result<Json<DeleteResult>, Status> {
-    return Err(Status::ImATeapot);
-}
+pub async fn delete_user(
+    u:Json<User>,
+    db: &State<Connector>,
+    jar: &CookieJar<'_>
+) -> Result<Json<DeleteResult>, Status> {
+    let data = parse_user(u).unwrap();
+    let user_detail = db.delete_user(data).await;
+    match user_detail {
+        Ok(user) => Ok(Json(user)),
+        Err(_) => Err(Status::ImATeapot),
+    }}
 
 /* 
 ----- Session Related Section -----

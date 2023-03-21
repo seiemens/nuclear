@@ -162,7 +162,6 @@ impl Connector {
 impl Connector {
     pub async fn upload_files(&self, files: Vec<File>) -> Result<InsertManyResult, Error> {
         let files = self.file_col.insert_many(files, None).await;
-        
         return Ok(files.unwrap());
     }
 
@@ -174,5 +173,15 @@ impl Connector {
         let filter = doc! {"_id":id};
         let result = self.file_col.delete_one(filter, None).await?;
         return Ok(result);
+    }
+
+    pub async fn fetch_files(&self, author:String) -> Result<Vec<File>, Error> {
+        let mut cursor = self.file_col.find(doc! {"author:":author}, None).await.unwrap();
+        let mut array: Vec<File> = Vec::new();
+
+        while let Ok(Some(f)) = cursor.try_next().await {
+            array.push(f);
+        }
+        return Ok(array); 
     }
 }

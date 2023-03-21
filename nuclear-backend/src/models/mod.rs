@@ -18,5 +18,5 @@ pub struct File {
     pub owned_by: ObjectId,
     pub name: String,
     pub size: i64,
-    file: Vec<u8>
+    pub data: Vec<u8>
 }
