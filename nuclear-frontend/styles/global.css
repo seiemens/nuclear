@@ -130,3 +130,7 @@ button:hover, input:focus, input:hover{
     top: 11rem;
     width: 15rem;
 }
+
+::selection {
+    background-color: rgb(var(--g-green));
+}

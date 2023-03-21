@@ -1,29 +1,7 @@
-use argon2::Error;
 use mongodb::results::{InsertOneResult, DeleteResult};
 use rocket::{serde::json::Json, http::{Status, CookieJar, Cookie}, State};
 
-use crate::{models::User, helpers::{endecr, token, cookies::{get_cookie_value, cookie}}, data::connector::Connector};
-
-/// Slams the user data through a model to make it easier to use.
-pub fn parse_user(u: Json<User>) -> Result<User, Error> {
-    
-    // generate a token if no token has been supplied.
-    let token:String;
-    if u.auth_token == None {
-        token = token::generate(64);
-    }else{
-        token = u.auth_token.clone().unwrap();
-    }
-    let data = User {
-        _id: u._id.to_owned(),
-        name: u.name.to_owned(),
-        password: endecr::encrypt(u.password.to_owned()),
-        email: u.email.to_owned(),
-        role:u.role.to_owned(),
-        auth_token:Some(token.to_owned()),
-    };
-    return Ok(data);
-}
+use crate::{models::User, helpers::{endecr, token, cookies::{get_cookie_value, cookie}, parser::parse_user}, data::connector::Connector};
 
 /*
 ----- Management Section -----

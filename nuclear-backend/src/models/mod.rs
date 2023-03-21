@@ -1,4 +1,5 @@
 use mongodb::bson::oid::ObjectId;
+use rocket::{fs::TempFile, http::ContentType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -15,8 +16,13 @@ pub struct User {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct File {
     pub _id: Option<ObjectId>,
-    pub owned_by: ObjectId,
+    pub owned_by: String,
     pub name: String,
-    pub size: i64,
-    pub data: Vec<u8>
+    pub path: String,
+    pub size: u64,
+}
+
+#[derive(FromForm, Debug)]
+pub struct Upload<'r>{
+    pub file:TempFile<'r>    
 }

@@ -11,11 +11,12 @@ use mongodb::{
     bson::{doc, oid::ObjectId},
     Client,
     Collection,
-    error::Error, results::{DeleteResult, InsertOneResult, InsertManyResult},
+    error::Error, results::{DeleteResult, InsertOneResult},
 };
 use rocket::{futures::TryStreamExt, http::Status};
+use serde::__private::doc;
 
-use crate::models::{File, User};
+use crate::{models::{File, User}};
 
 pub struct Connector {
     user_col: Collection<User>,
@@ -113,27 +114,6 @@ impl Connector {
         }
     }
 
-    /// Update a user based on its ObjectId - Property
-    pub async fn update_user(&self, u: User) -> Result<InsertOneResult, Error> {
-        let new = User {
-            _id: u._id,
-            name:u.name,
-            password: u.password,
-            email: u.email,
-            role:u.role,
-            auth_token: u.auth_token,
-        };
-
-        self.user_col
-            .delete_one(doc! { "_id": u._id }, None)
-            .await?;
-
-        let res = 
-        self.user_col.insert_one(new, None).await.ok();
-
-        return Ok(res.unwrap());
-    }
-
     /// [ADMIN] - Delete User
     pub async fn delete_user(&self, u: User) -> Result<DeleteResult, Error> {
         let filter = doc! {"_id":u._id};
@@ -160,8 +140,8 @@ impl Connector {
 */
 
 impl Connector {
-    pub async fn upload_files(&self, files: Vec<File>) -> Result<InsertManyResult, Error> {
-        let files = self.file_col.insert_many(files, None).await;
+    pub async fn upload_file(&self, mt: File) -> Result<InsertOneResult, Error> {
+        let files = self.file_col.insert_one(mt, None).await;
         return Ok(files.unwrap());
     }
 
@@ -176,7 +156,8 @@ impl Connector {
     }
 
     pub async fn fetch_files(&self, author:String) -> Result<Vec<File>, Error> {
-        let mut cursor = self.file_col.find(doc! {"author:":author}, None).await.unwrap();
+        let filter = doc! {"owned_by":author};
+        let mut cursor = self.file_col.find(filter, None).await.unwrap();
         let mut array: Vec<File> = Vec::new();
 
         while let Ok(Some(f)) = cursor.try_next().await {

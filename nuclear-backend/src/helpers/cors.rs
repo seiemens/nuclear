@@ -1,6 +1,5 @@
 use rocket::{fairing::{Kind, Fairing, Info}, Request, Response, http::Header};
 
-
 // enable cors for rocket
 pub struct Cors;
 #[rocket::async_trait]
