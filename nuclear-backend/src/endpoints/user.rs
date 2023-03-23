@@ -1,7 +1,7 @@
 use mongodb::results::{InsertOneResult, DeleteResult};
 use rocket::{serde::json::Json, http::{Status, CookieJar, Cookie}, State};
 
-use crate::{models::User, helpers::{endecr, token, cookies::{get_cookie_value, cookie}, parser::parse_user}, data::connector::Connector};
+use crate::{models::User, helpers::{cookies::{get_cookie_value}, parser::parse_user}, data::connector::Connector};
 
 /*
 ----- Management Section -----
@@ -24,7 +24,7 @@ pub async fn new_user(
 pub async fn delete_user(
     u:Json<User>,
     db: &State<Connector>,
-    jar: &CookieJar<'_>
+    _jar: &CookieJar<'_>
 ) -> Result<Json<DeleteResult>, Status> {
     let data = parse_user(u).unwrap();
     let user_detail = db.delete_user(data).await;
@@ -41,7 +41,7 @@ pub async fn delete_user(
 pub async fn login(
     u:Json<User>,
     db: &State<Connector>,
-    jar: &CookieJar<'_>
+    _jar: &CookieJar<'_>
 ) -> Result<Json<User>, Status> {
     let data = parse_user(u).unwrap();
     let user = db.get_user(data.clone()).await;

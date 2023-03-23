@@ -60,7 +60,7 @@ impl Connector {
     }
 
     /// verify that its an admin
-    pub async fn verify_admin(&self, token: String) -> Result<User, bool> {
+    pub async fn _verify_admin(&self, token: String) -> Result<User, bool> {
         let filter = doc! {"auth_token":token, "role":1};
 
         let result = self.user_col.find_one(filter, None).await;
@@ -121,7 +121,7 @@ impl Connector {
     }
 
     /// [ADMIN] - Return a vector containing all users for management.
-    pub async fn get_users(&self) -> Result<Vec<User>, Status> {
+    pub async fn _get_users(&self) -> Result<Vec<User>, Status> {
         let mut cursor = self.user_col.find(None, None).await.unwrap();
 
         let mut array: Vec<User> = Vec::new();

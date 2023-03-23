@@ -1,5 +1,5 @@
 use mongodb::bson::oid::ObjectId;
-use rocket::{fs::TempFile, http::ContentType};
+use rocket::{fs::TempFile};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]

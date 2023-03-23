@@ -7,8 +7,8 @@
 use std::{str::FromStr, path::Path};
 
 use mongodb::{results::{DeleteResult, InsertOneResult}, bson::oid::ObjectId};
-use rocket::{serde::json::Json, http::{Status, CookieJar, Cookie}, State, form::Form, fs::NamedFile};
-use crate::{models::{User, File, Upload}, helpers::{endecr, token, cookies::{get_cookie_value, cookie}, parser::parse_file}, data::connector::Connector};
+use rocket::{serde::json::Json, http::{Status, CookieJar}, State, form::Form, fs::NamedFile};
+use crate::{models::{File, Upload}, helpers::{cookies::{get_cookie_value}, parser::parse_file}, data::connector::Connector};
 
 
 #[get("/files")]
