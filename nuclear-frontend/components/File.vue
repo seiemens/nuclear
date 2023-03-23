@@ -55,18 +55,6 @@ export default {
         shareItem() {
             let link = "http://localhost:4200/share/" + this.id;
             navigator.clipboard.writeText(link.toString()).then(() => alert("copied to clipboard!"));
-
-            axios.post('/user', {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
-            })
-            .then(function (response) {
-            console.log(response);
-            })
-            .catch(function (error) {
-            console.log(error);
-            });
-
         }
     }
 }
