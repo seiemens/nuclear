@@ -16,10 +16,10 @@ pub struct User {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct File {
     pub _id: Option<ObjectId>,
-    pub owned_by: String,
-    pub name: String,
-    pub path: String,
-    pub size: u64,
+    pub owned_by: Option<String>,
+    pub name: Option<String>,
+    pub path: Option<String>,
+    pub size: Option<u64>,
 }
 
 #[derive(FromForm, Debug)]

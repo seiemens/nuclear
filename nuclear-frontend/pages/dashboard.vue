@@ -2,7 +2,7 @@
     <div class="container floating">
         <h1>my files</h1>
         <div class="centered upload-container">
-            <Form v-on:submit.prevent="newFile()">
+            <form v-on:submit.prevent="newFile()">
                 <label id="upload">select
                 <input 
                     type="file" 
@@ -11,7 +11,7 @@
                 >
             </label>
             <button type="submit" class="upload">send it</button>
-            </Form>
+            </form>
         </div>
         <div class="item-container">
             <File 
@@ -20,6 +20,8 @@
             :id="f._id.$oid"
             :filename="f.name"
             :size="f.size"
+            :owned_by="f.owned_by"
+            :path="f.path"
             />
         </div>
     </div>
@@ -39,15 +41,17 @@ export default {
         auth();
         const result = await $fetch('http://localhost:4200/files', {credentials:"include"});
         this.files = result;
-        console.log(this.files);
     },
     methods:{
         async newFile(){
             let f = document.getElementById("fileUpload").files[0];
             let formdata = new FormData();
             formdata.set('file', f);
-            let res = await $fetch('http://localhost:4200/upload', {method:"POST", credentials:"include", body:formdata});
-            console.log(res);
+            const res = await $fetch('http://localhost:4200/upload', {method:"POST", credentials:"include", body:formdata});
+            // refresh the page on successful deletion
+            if(res.insertedId) {
+                window.location.reload();
+            }
        }
     }
 }

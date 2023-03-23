@@ -5,7 +5,7 @@
 
 extern crate dotenv;
 
-use std::env;
+use std::{env, fs};
 use dotenv::dotenv;
 use mongodb::{
     bson::{doc, oid::ObjectId},
@@ -14,7 +14,6 @@ use mongodb::{
     error::Error, results::{DeleteResult, InsertOneResult},
 };
 use rocket::{futures::TryStreamExt, http::Status};
-use serde::__private::doc;
 
 use crate::{models::{File, User}};
 
@@ -141,16 +140,25 @@ impl Connector {
 
 impl Connector {
     pub async fn upload_file(&self, mt: File) -> Result<InsertOneResult, Error> {
-        let files = self.file_col.insert_one(mt, None).await;
-        return Ok(files.unwrap());
+        let file = self.file_col.insert_one(mt, None).await;
+        return Ok(file.unwrap());
     }
 
-    pub async fn prepare_file(filename:String) -> /*Result<<File>, Status>*/ i32 {
-        return 0;
+    pub async fn get_file(&self, id:ObjectId) -> Result<File, Status> {
+        let filter = doc! {"_id":id};
+        let item = self.file_col.find_one(filter.clone(), None).await;
+        
+        return Ok(item.unwrap().unwrap());
     }
 
     pub async fn delete_file(&self, id: ObjectId) -> Result<DeleteResult, Error> {
         let filter = doc! {"_id":id};
+        
+        // delete the persistent file
+        let result = self.file_col.find_one(filter.clone(), None).await?;
+        let _del = fs::remove_file(result.unwrap().path.unwrap());
+
+        // remove it from the db aswell
         let result = self.file_col.delete_one(filter, None).await?;
         return Ok(result);
     }

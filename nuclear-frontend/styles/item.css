@@ -53,6 +53,9 @@ h1 {
     align-items: center;
     overflow: hidden;
 }
+.info-container > span {
+    overflow: hidden;
+}
 #upload, .upload {
     font-size: 2rem;
     padding: 1rem;
@@ -78,4 +81,21 @@ h1 {
 #size::after {
     content: " ]";
     color: rgb(var(--g-green));
+}
+#delete, #share {
+    width: 2rem;
+    transition: 0.2s;
+    position: absolute;
+}
+#delete {
+    right: 0.5rem;
+    top: 0.5rem;
+}
+#share {
+    left: 0.5rem;
+    top: 0.5rem;
+}
+#delete:hover, #share:hover{
+    scale: 1.15;
+    cursor: pointer;
 }

@@ -50,11 +50,6 @@ pub async fn login(
     if let Ok(None) = user {
         return Err(Status::ImATeapot);
     } else {
-        // and return a biscuit if it does.
-        jar.add(cookie(
-            String::from("auth"),
-            String::from(user.clone().unwrap().unwrap().auth_token.unwrap()),
-        ));
         return Ok(Json(user.unwrap().unwrap()));
     }
 }

@@ -4,8 +4,7 @@ use std::vec;
 use data::connector::Connector;
 use helpers::cors;
 use endpoints::user::{auth_session, new_user, login, logout, delete_user};
-use rocket::data::{Limits, ToByteUnit};
-use crate::endpoints::file::{fetch_files, delete_file, upload_file};
+use crate::endpoints::file::{fetch_files, delete_file, upload_file, gen_link};
 
 mod data;
 mod models;
@@ -20,7 +19,7 @@ async fn rocket() -> _ {
     .manage(db)
     .attach(cors::Cors)
     .mount("/", routes![
-        login, logout, auth_session, new_user, delete_user,fetch_files,delete_file,upload_file, preflight
+        login, logout, auth_session, new_user, delete_user,fetch_files,delete_file,upload_file,gen_link, preflight
     ])
 }
 

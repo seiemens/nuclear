@@ -43,10 +43,10 @@ pub async fn parse_file(file: &mut TempFile<'_>, owner:String) -> File {
 
     let data = File {
         _id: Some(ObjectId::new()),
-        name: fullname,
-        path: path,
-        owned_by: owner.to_owned(),
-        size: file.len().to_owned(),
+        name: Some(fullname),
+        path: Some(path),
+        owned_by: Some(owner.to_owned()),
+        size: Some(file.len().to_owned()),
     };
 
     data
