@@ -6,6 +6,7 @@ use rocket::time::{Duration};
 -> We love cookie clicker, don't we?
 */
 
+/// generate a new cookie based on the parameters
 pub fn cookie(name: String, value: String) -> Cookie<'static> {
     let cookie = Cookie::build(name, value)
     .path("/")
@@ -23,6 +24,8 @@ pub fn get_cookie_value(jar: &CookieJar<'_>, name: String) -> String {
     let c = jar.get(&name);
 
     if c.is_some() {
+        // since cookies are stored as a string in the format of "key=value"
+        // they have to be split into an array.
         return String::from(jar.get(&name).map(|cookie| cookie.value()).unwrap());
     }else {
         return String::from("");

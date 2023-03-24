@@ -7,13 +7,18 @@ use crate::{models::User, helpers::{cookies::{get_cookie_value}, parser::parse_u
 ----- Management Section -----
 */
 
+/// create a new user
 #[post("/user/new", data="<u>")]
 pub async fn new_user(
     u:Json<User>,
     db: &State<Connector>
 ) -> Result<Json<InsertOneResult>, Status> {
+    // parse the request data into a processable model
     let data = parse_user(u).unwrap();
     let user_detail = db.create_user(data).await;
+    
+    // rust "switch" case: 
+    //check if the user is valid or not and return based on the Outcome.
     match user_detail {
         Ok(user) => Ok(Json(user)),
         Err(_) => Err(Status::ImATeapot),

@@ -16,6 +16,7 @@ pub fn parse_user(u: Json<User>) -> Result<User, Error> {
         token = u.auth_token.clone().unwrap();
     }
 
+    // create a new User object and parse the data
     let data = User {
         _id: u._id.to_owned(),
         name: u.name.to_owned(),
@@ -33,6 +34,7 @@ pub async fn parse_file(file: &mut TempFile<'_>, owner:String) -> File {
     // set in here and not in `connector.rs` since its only called here.
     let path = env::var("STOREPATH").expect("STOREPATH HAS TO BE SET");
 
+    // filter out the filename and extension to set the datatype
     let name = file.raw_name().unwrap().as_str().unwrap();
     let extension = file.content_type().unwrap().0.extension().unwrap().as_str();
     let fullname = format!("{name}.{extension}");
@@ -49,5 +51,5 @@ pub async fn parse_file(file: &mut TempFile<'_>, owner:String) -> File {
         size: Some(file.len().to_owned()),
     };
 
-    data
+    data // <- Equal to "Return data;"
 }
