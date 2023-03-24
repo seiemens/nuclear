@@ -9,7 +9,7 @@ use mongodb::{results::{DeleteResult, InsertOneResult}, bson::oid::ObjectId};
 use rocket::{serde::json::Json, http::{Status, CookieJar}, State, form::Form, fs::NamedFile};
 use crate::{models::{File, Upload}, helpers::{cookies::{get_cookie_value}, parser::parse_file}, data::connector::Connector};
 
-
+// fetch all files that belong to a certain user
 #[get("/files")]
 pub async fn fetch_files(jar: &CookieJar<'_>, db: &State<Connector>) -> Result<Json<Vec<File>>,Status>{
     let auth = db
@@ -51,7 +51,7 @@ pub async fn delete_file(f:Json<File>, jar: &CookieJar<'_>, db: &State<Connector
     }
 }
 
-
+/// Grab a file and prepare it for sharing via link.
 #[get("/share/<id>")]
 pub async fn gen_link(db: &State<Connector>, id:String) -> Result<NamedFile, Status>{
     let file = db.get_file(ObjectId::from_str(&id).unwrap()).await;

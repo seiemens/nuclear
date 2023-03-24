@@ -16,8 +16,8 @@ async fn rocket() -> _ {
     let db = Connector::init().await;
 
     rocket::build()
-    .manage(db)
-    .attach(cors::Cors)
+    .manage(db) // make the DB accessible to the whole application
+    .attach(cors::Cors) // attach the CORS Fairing
     .mount("/", routes![
         login, logout, auth_session, new_user, delete_user,fetch_files,delete_file,upload_file,gen_link, preflight
     ])

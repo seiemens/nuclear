@@ -31,6 +31,7 @@ impl Connector {
         //change the var 'key' to change the uri (contained in .env file)
         let uri = env::var("MONGOURI").expect("MONGOURI HAS TO BE SET");
 
+        // init a new connection to the db
         let client = Client::with_uri_str(uri).await.unwrap();
         let db = client.database("nuclear");
         let user_col: Collection<User> = db.collection("users");
@@ -93,6 +94,8 @@ impl Connector {
             role:u.role,
             auth_token: u.auth_token,
         };
+
+        // insert the new user object
         let user = self
             .user_col
             .insert_one(new, None)
@@ -143,7 +146,8 @@ impl Connector {
         let file = self.file_col.insert_one(mt, None).await;
         return Ok(file.unwrap());
     }
-
+    
+    /// get a certain file
     pub async fn get_file(&self, id:ObjectId) -> Result<File, Status> {
         let filter = doc! {"_id":id};
         let item = self.file_col.find_one(filter.clone(), None).await;
@@ -164,10 +168,12 @@ impl Connector {
     }
 
     pub async fn fetch_files(&self, author:String) -> Result<Vec<File>, Error> {
+        // only select files which belong to the owner
         let filter = doc! {"owned_by":author};
         let mut cursor = self.file_col.find(filter, None).await.unwrap();
         let mut array: Vec<File> = Vec::new();
 
+        // add them to a vector for a proper response
         while let Ok(Some(f)) = cursor.try_next().await {
             array.push(f);
         }

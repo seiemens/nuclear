@@ -5,6 +5,8 @@ use crate::{models::User, helpers::{cookies::{get_cookie_value}, parser::parse_u
 
 /*
 ----- Management Section -----
+-> INFO:
+    "match {}" -> is equal to a Switch() statement in C#
 */
 
 /// create a new user
@@ -25,6 +27,7 @@ pub async fn new_user(
     }
 }
 
+/// ADMIN ROUTE - Delete an existing user from the DB
 #[post("/user/delete", data="<u>")]
 pub async fn delete_user(
     u:Json<User>,
@@ -42,6 +45,7 @@ pub async fn delete_user(
 ----- Session Related Section -----
 */
 
+/// login a user / create a cookie.
 #[post("/login", data="<u>")]
 pub async fn login(
     u:Json<User>,
@@ -59,12 +63,14 @@ pub async fn login(
     }
 }
 
+/// remove the cookie.
 #[get("/logout")]
 pub async fn logout(jar: &CookieJar<'_>) -> Result<Status,Status>{
     jar.remove(Cookie::named("auth_biscuit"));
     return Ok(Status::Ok);
 }
 
+/// used on page navigation to ensure the user is still logged in.
 #[get("/auth")]
 pub async fn auth_session(
     db: &State<Connector>,
@@ -73,6 +79,7 @@ pub async fn auth_session(
     let auth = db
         .verify_auth(get_cookie_value(jar, String::from("auth_biscuit")))
         .await;
+    // if a false is returned, the auth() function in the frontend will redirect to login
     if auth.is_ok() {
         return Ok(Json(auth.unwrap()));
     } else {
